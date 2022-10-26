@@ -22,10 +22,3 @@ public class BaseDatos {
         }
     }   
 }
-public class main
-{
-    public static void main(String[ ] arg) {
-      System.out.println("Hola Java");
-      obtenerConexion();
-      }
-}
