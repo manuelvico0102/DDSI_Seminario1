@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 
 public class BaseDatos {
     public BaseDatos (){
-
+a
     }
     String jdbcUrl = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
     String usuario = "x6512201";
