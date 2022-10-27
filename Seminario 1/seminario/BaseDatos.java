@@ -8,13 +8,9 @@ import javax.swing.JOptionPane;
 public class BaseDatos {
 
     String jdbcUrl = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
-<<<<<<< HEAD
-    String usuario = "x6520114";
-    String password = "x6520114"; 
-=======
-    String usuario = "x77203307";
-    String password = "x77203307"; 
->>>>>>> fd083fe2b8e277413315bc64c8c119b1968ccb63
+    String usuario = "x6512201";
+    String password = "x6512201"; 
+
     Connection conexion;
     
     public BaseDatos (){
