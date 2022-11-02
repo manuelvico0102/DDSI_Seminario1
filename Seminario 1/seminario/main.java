@@ -4,7 +4,7 @@
  */
 package seminario1;
 
-import oracle.jdbc.pool.OracleDataSource;
+import java.sql.SQLException;
 
 
 /**
@@ -16,8 +16,8 @@ public class main {
     /**
      * @param args the command line arguments
      */
-    
-    public static void main(String[] args) {
+    public static void main(String[] args) throws SQLException {
+        InsertarPedido insert = new InsertarPedido();
         
         // Conectamos
         BaseDatos base = new BaseDatos();
@@ -30,7 +30,7 @@ public class main {
         
         // Preguntamos qué quiere hacer
         Vista vista = new Vista();
-        Controlador controlador = new Controlador(vista, base);
+        Controlador controlador = new Controlador(vista, base, insert);
     }
     
 }

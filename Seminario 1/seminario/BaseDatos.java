@@ -23,10 +23,12 @@ import oracle.jdbc.pool.OracleDataSource;
 public class BaseDatos {
         
     String jdbcUrl = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
-    String usuario = "x6520114";
-    String password = "x6520114"; 
+    String usuario = "x7203307";
+    String password = "x7203307"; 
     //Connection conexion;
     OracleConnection cn;
+    
+    OracleStatement st;
         
     public BaseDatos (){
         
@@ -44,7 +46,7 @@ public class BaseDatos {
             
             
             cn = (OracleConnection) ods.getConnection();
-            //OracleStatement st = (OracleStatement) cn.createStatement();
+         
             //OracleResultSet rs = (OracleResultSet) st.executeQuery("");
             
             
@@ -57,12 +59,47 @@ public class BaseDatos {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos");     
             System.exit(0);
         }
-    }   
+    }
+    
+    public void crearTabla() throws SQLException{
+        //b
+        st = (OracleStatement) cn.createStatement();
+        // Borrar lo que haya
+        String borra = "DROP TABLE IF EXISTS STOCK";
+        st.executeUpdate(borra);
+        
+        // Crear la tabla
+        String stock = "CREATE TABLE STOCK ("
+                + " CPRODUCTO CHAR(3) PRIMARY KEY,"
+                +  "CANTIDAD NUMBER(4) CHECK (CANTIDAD >= 0)"
+                + ")";
+        st.executeUpdate(stock);
+        
+        String pedido = "CREATE TABLE PEDIDO ("
+                + " CPEDIDO CHAR(3) PRIMARY KEY,"
+                + " CPRODUCTO CHAR(3),"
+                +  "FECHA-PEDIDO DATE"
+                + ")";
+        st.executeUpdate(pedido);
+        
+        String detallePedido = "CREATE TABLE DETALLE-PEDIDO ("
+                + " CPEDIDO CHAR(3) REFERENCES STOCK(CPRODUCTO),"
+                + " CPRODUCTO CHAR(3) REFERENCES PEDIDO(CPEDIDO),"
+                + "CANTIDAD NUMBER(4) CHECK (CANTIDAD >= 0),"
+                + "PRIMARY KEY(CPEDIDO, CPRODUCTO)"
+                + ")";
+        st.executeUpdate(detallePedido);
+        // Añadir 10 tuplas
+        
+    }
+    
+    
     
     public void cerrarConexion(){
         
         try{
             cn.close();
+            System.out.println("Se ha desconectado correctamente");
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Error al desconectar de la base de datos");     
             System.exit(0);
