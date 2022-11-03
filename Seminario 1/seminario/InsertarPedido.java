@@ -4,7 +4,12 @@
  */
 package seminario1;
 
+import java.sql.SQLException;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import oracle.jdbc.OracleStatement;
 
 /**
  *
@@ -48,17 +53,17 @@ public class InsertarPedido extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Phosphate", 0, 24)); // NOI18N
         jLabel1.setText("DATOS BÁSICOS DEL PEDIDO");
 
-        cPedido.setText("codPedido");
+        cPedido.setText("000");
         cPedido.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cPedidoActionPerformed(evt);
             }
         });
 
-        cCliente.setText("codCliente");
+        cCliente.setText("000");
 
         fechaPedido.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("d/M/y"))));
-        fechaPedido.setText("dd/mm/yyyy");
+        fechaPedido.setText("dd/mm/yy");
 
         jLabel2.setText("Código del pedido:");
 
@@ -92,11 +97,12 @@ public class InsertarPedido extends javax.swing.JFrame {
                                     .addComponent(jLabel2)
                                     .addComponent(jLabel4))
                                 .addGap(56, 56, 56)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(fechaPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(cCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(cPedido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(fechaPedido)
+                                    .addComponent(cPedido)))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(159, 159, 159)
+                                .addComponent(cCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(113, 113, 113))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jButton1)
@@ -132,7 +138,11 @@ public class InsertarPedido extends javax.swing.JFrame {
     }//GEN-LAST:event_cPedidoActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       this.controlador.elegirOpcion();
+        try {
+            this.controlador.insertadPedido(cCliente, cPedido, fechaPedido);
+            this.controlador.elegirOpcion();
+        } catch (SQLException ex) {
+        }
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**

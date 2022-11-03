@@ -144,9 +144,10 @@ public class Vista extends javax.swing.JFrame {
     private void botonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearActionPerformed
         try {
             this.controlador.CrearTabla();
+            JOptionPane.showMessageDialog(null, "Tablas Creadas");
         }catch(Exception e){
             JOptionPane.showMessageDialog(null, "Error al crear la tabla");     
-            System.exit(0);
+            //System.exit(0);
         }
     }//GEN-LAST:event_botonCrearActionPerformed
 
