@@ -18,7 +18,7 @@ public class main {
      */
     public static void main(String[] args) throws SQLException {
         InsertarPedido insert = new InsertarPedido();
-        
+        Opciones opcion = new Opciones();
         // Conectamos
         BaseDatos base = new BaseDatos();
         
@@ -30,7 +30,7 @@ public class main {
         
         // Preguntamos qué quiere hacer
         Vista vista = new Vista();
-        Controlador controlador = new Controlador(vista, base, insert);
+        Controlador controlador = new Controlador(vista, base, insert, opcion);
     }
     
 }

@@ -140,8 +140,10 @@ public class InsertarPedido extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         try {
             this.controlador.insertadPedido(cCliente, cPedido, fechaPedido);
+            JOptionPane.showMessageDialog(null, "Pedio añadido");
             this.controlador.elegirOpcion();
         } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error al añadir el pedido");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

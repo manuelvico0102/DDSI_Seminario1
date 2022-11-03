@@ -41,6 +41,7 @@ public class Vista extends javax.swing.JFrame {
         botonSalir = new javax.swing.JButton();
         botonCrear = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        botonBorrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(153, 204, 255));
@@ -85,6 +86,15 @@ public class Vista extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Phosphate", 0, 24)); // NOI18N
         jLabel1.setText("MENÚ PRINCIPAL DE LA BASE DE DATOS");
 
+        botonBorrar.setBackground(new java.awt.Color(218, 236, 255));
+        botonBorrar.setFont(new java.awt.Font("Farah", 0, 16)); // NOI18N
+        botonBorrar.setText("Borrar Tablas");
+        botonBorrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botonBorrarActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -96,33 +106,37 @@ public class Vista extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addGap(43, 43, 43))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(66, 66, 66)
-                                .addComponent(botonCrear))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(36, 36, 36)
-                                .addComponent(botonDarDeAlta))
-                            .addComponent(botonMostrar)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(128, 128, 128)
-                                .addComponent(botonSalir)))
-                        .addGap(79, 79, 79))))
+                        .addComponent(botonSalir)
+                        .addGap(245, 245, 245))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonDarDeAlta)
+                        .addGap(151, 151, 151))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonMostrar)
+                        .addGap(120, 120, 120))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonBorrar)
+                        .addGap(217, 217, 217))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(botonCrear)
+                        .addGap(189, 189, 189))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap(22, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(37, 37, 37)
-                .addComponent(botonCrear)
-                .addGap(26, 26, 26)
-                .addComponent(botonDarDeAlta)
                 .addGap(27, 27, 27)
+                .addComponent(botonCrear)
+                .addGap(18, 18, 18)
+                .addComponent(botonDarDeAlta)
+                .addGap(18, 18, 18)
                 .addComponent(botonMostrar)
-                .addGap(38, 38, 38)
+                .addGap(18, 18, 18)
+                .addComponent(botonBorrar)
+                .addGap(32, 32, 32)
                 .addComponent(botonSalir)
-                .addGap(43, 43, 43))
+                .addGap(31, 31, 31))
         );
 
         pack();
@@ -146,10 +160,21 @@ public class Vista extends javax.swing.JFrame {
             this.controlador.CrearTabla();
             JOptionPane.showMessageDialog(null, "Tablas Creadas");
         }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al crear la tabla");     
+            JOptionPane.showMessageDialog(null, "Las tablas ya estaban creadas");     
             //System.exit(0);
         }
     }//GEN-LAST:event_botonCrearActionPerformed
+
+    private void botonBorrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBorrarActionPerformed
+        // TODO add your handling code here:
+        try {
+            this.controlador.borrarTablas();
+            JOptionPane.showMessageDialog(null, "Tablas Borradas");
+        }catch(Exception e){
+            JOptionPane.showMessageDialog(null, "Las tablas ya estaban borradas");     
+            //System.exit(0);
+        }
+    }//GEN-LAST:event_botonBorrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -187,6 +212,7 @@ public class Vista extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botonBorrar;
     private javax.swing.JButton botonCrear;
     private javax.swing.JButton botonDarDeAlta;
     private javax.swing.JButton botonMostrar;

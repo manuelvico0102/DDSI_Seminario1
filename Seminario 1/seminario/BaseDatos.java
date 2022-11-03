@@ -15,7 +15,7 @@ import oracle.jdbc.OracleConnection;
 import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.OracleStatement;
 import oracle.jdbc.pool.OracleDataSource;
-import seminario1.InsertarPedido;
+
 /**
  *
  * @author carlota
@@ -23,13 +23,12 @@ import seminario1.InsertarPedido;
 
 public class BaseDatos {
         
-    String jdbcUrl = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
+    //String url = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
+    String url = "jdbc:oracle:thin:@oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
     String usuario = "x6520114";
     String password = "x6520114"; 
-    //Connection conexion;
-    OracleConnection cn;
-    
-    
+    Connection conexion = null;
+    Statement st;
         
     public BaseDatos (){
         
@@ -37,21 +36,12 @@ public class BaseDatos {
     
     public void obtenerConexion(){
         try{
-            OracleDataSource ods = new OracleDataSource();
-            ods.setURL(jdbcUrl);
-            ods.setUser(usuario);
-            ods.setPassword(password);
-            
-            cn = (OracleConnection) ods.getConnection();
-         
-            //OracleResultSet rs = (OracleResultSet) st.executeQuery("");
-            
-            
-            DatabaseMetaData dm = cn.getMetaData();
-            System.out.println("Nombre "+dm.getDriverName());
-            System.out.println("Version "+dm.getDriverVersion());
-            System.out.println("URL "+dm.getURL());
-            System.out.println("Usuario "+dm.getUserName());
+            conexion = DriverManager.getConnection(url,usuario,password);
+            if(conexion != null){
+                System.out.println("Conectado a la base de datos");
+                st = conexion.createStatement();
+                conexion.setAutoCommit(false);
+            }
         }catch(SQLException ex){
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos");     
             System.exit(0);
@@ -59,8 +49,6 @@ public class BaseDatos {
     }
     
     public void crearTabla() throws SQLException{
-        //b
-        OracleStatement st = (OracleStatement) cn.createStatement();
 
         // Crear la tabla
         String stock = "CREATE TABLE STOCK ("
@@ -84,26 +72,43 @@ public class BaseDatos {
                 + ")";
         st.executeUpdate(detallePedido);
         // Añadir 10 tuplas
+        
+        try{
+            conexion.commit();
+        }catch(SQLException ex){
+            JOptionPane.showMessageDialog(null, "Error al hacer commit");
+        }
+    }
     
+    public void borrarTablas() throws SQLException{
+        String bdetallePedido = "DROP TABLE DETALLE_PEDIDO";
+        st.execute(bdetallePedido);
+        
+        String bPedido = "DROP TABLE PEDIDO";
+        st.execute(bPedido);
+        
+        String bStock = "DROP TABLE STOCK";
+        st.execute(bStock);
+        
+        conexion.commit();
     }
     
     public void insertarPedido(javax.swing.JTextField cCliente, javax.swing.JTextField cPedido, javax.swing.JFormattedTextField fechaPedido) throws SQLException{
-        //Si las tablas ya estan creadas por algun motivo no ejecuta
-        //En cambio si creas las tablas y luego añades funciona
-        try {
-            OracleStatement st = (OracleStatement) cn.createStatement();
-            String aniadePedido = "INSERT INTO PEDIDO VALUES('"+cPedido.getText()+"', '"+cCliente.getText()+"', '"+fechaPedido.getText()+"')";
-            st.executeUpdate(aniadePedido);
-            JOptionPane.showMessageDialog(null, "Pedio añadido");
-        }catch(Exception e){
-            JOptionPane.showMessageDialog(null, "Error al añadir el pedido");     
-        }
+        String aniadePedido = "INSERT INTO PEDIDO VALUES('"
+                                +cPedido.getText()+"', '"
+                                +cCliente.getText()+"', '"
+                                +fechaPedido.getText()+"')";
+        st.executeUpdate(aniadePedido);
+        conexion.commit();
     }
+    
+   
     
     public void cerrarConexion(){
         
         try{
-            cn.close();
+            st.close();
+            conexion.close();
             System.out.println("Se ha desconectado correctamente");
             System.exit(0);
         }catch(Exception e){
