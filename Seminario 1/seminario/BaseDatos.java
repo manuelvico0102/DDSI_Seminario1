@@ -1,4 +1,4 @@
-/*
+    /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
@@ -11,6 +11,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 import java.util.logging.Level;
+import javax.swing.table.DefaultTableModel;
 import oracle.jdbc.OracleConnection;
 import oracle.jdbc.OracleResultSet;
 import oracle.jdbc.OracleStatement;
@@ -102,7 +103,24 @@ public class BaseDatos {
         conexion.commit();
     }
     
-   
+    
+   public void buscarTablaPedido(javax.swing.JTable tablePedido, String tabla) throws SQLException{
+        DefaultTableModel modelo = (DefaultTableModel) tablePedido.getModel();
+       
+        ResultSet rs = st.executeQuery("SELECT * FROM " + tabla);
+        
+        if(tabla == "PEDIDO" || tabla == "DETALLE_PEDIDO"){
+            while(rs.next()){
+                String[] fila = {rs.getString(1),rs.getString(2),rs.getString(3)};
+                modelo.addRow(fila);
+            }
+        }else if (tabla == "STOCK"){
+            while(rs.next()){
+                String[] fila = {rs.getString(1),rs.getString(2)};
+                modelo.addRow(fila);
+            }
+        }
+   }
     
     public void cerrarConexion(){
         

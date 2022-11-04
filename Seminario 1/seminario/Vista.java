@@ -15,12 +15,14 @@ import javax.swing.JOptionPane;
  */
 public class Vista extends javax.swing.JFrame {
     private Controlador controlador;
+    private Consultas consultas;
 
     /**
      * Creates new form Vista
      */
     public Vista() {
         initComponents();
+       
     }
     
     public void setControlador(Controlador controlador) {
@@ -153,6 +155,7 @@ public class Vista extends javax.swing.JFrame {
 
     private void botonMostrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonMostrarActionPerformed
         // TODO add your handling code here:
+        this.controlador.mostrarTablas();
     }//GEN-LAST:event_botonMostrarActionPerformed
 
     private void botonCrearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonCrearActionPerformed
