@@ -31,10 +31,6 @@ public class Controlador {
         this.base.crearTabla();
     }
     
-    public void borrarTablas() throws SQLException{
-        this.base.borrarTablas();
-    }
-    
     public void insertadPedido(javax.swing.JTextField cCliente, javax.swing.JTextField cPedido, javax.swing.JFormattedTextField fechaPedido) throws SQLException{
         this.base.insertarPedido(cCliente, cPedido, fechaPedido);
     }
