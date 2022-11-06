@@ -76,11 +76,7 @@ public class BaseDatos {
         st.executeUpdate(detallePedido);
         // Añadir 10 tuplas
 
-        try {
-            conexion.commit();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error al hacer commit");
-        }
+        this.commit();
     }
 
     public void borrarTablas() throws SQLException {
@@ -93,7 +89,7 @@ public class BaseDatos {
         String bStock = "DROP TABLE STOCK";
         st.execute(bStock);
 
-        conexion.commit();
+        this.commit();
     }
 
     public void insertarPedido(javax.swing.JTextField cCliente, javax.swing.JTextField cPedido, javax.swing.JFormattedTextField fechaPedido) throws SQLException {
@@ -102,12 +98,17 @@ public class BaseDatos {
                 + cCliente.getText() + "', '"
                 + fechaPedido.getText() + "')";
         st.executeUpdate(aniadePedido);
-        conexion.commit();
+        this.commit();  //Este commit habrá que quitarlo de momento esta de prueba
     }
 
     public void buscarTablaPedido(javax.swing.JTable tablePedido, String tabla) throws SQLException {
         DefaultTableModel modelo = (DefaultTableModel) tablePedido.getModel();
-
+        
+        //Borramos las filas que hayan escritas
+        int filas = modelo.getRowCount();
+        for(int i = 0; i < filas; i++)
+           modelo.removeRow(0);
+        
         ResultSet rs = st.executeQuery("SELECT * FROM " + tabla);
 
         if (tabla == "PEDIDO" || tabla == "DETALLE_PEDIDO") {
@@ -122,7 +123,67 @@ public class BaseDatos {
             }
         }
     }
-
+    
+    //Las opciones 1,2,3y4 no estan terminadas
+    //Opcion 1 
+    //Comprueba si hay stock, si hay actualiza stock y devuelve true, en caso contrario false
+    public boolean compruebaStock(String Cprod, String cantidad){
+        boolean hayStock = false;
+        int cant = Integer.parseInt(cantidad);
+        String salida = "SELECT * FROM STOCK WHERE CPRODUCTO = '"+Cprod+"'"; 
+        try {
+            ResultSet rs = st.executeQuery(salida);
+            
+            if(rs.getInt(2) >= cant){
+                hayStock = true;
+                cant = cant - rs.getInt(2);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        if(hayStock){
+            String actualiza = "update STOCK set CANTIDAD='"+Integer.toString(cant)+"' "
+                                + "WHERE CPRODUCTO = '"+Cprod+"'";
+            try {
+                st.execute(actualiza);
+            } catch (SQLException ex) {
+                Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        
+        return hayStock;
+    }
+    
+    //Opcion 2 de Dar de alta un nuevo pedido
+    public void eliminarDetallesDeUnPedido(String Cpedido){
+        String borrarDetalles = "DELETE FROM DETALLE_PEDIDO"
+                                + " WHERE CPEDIDO = '" +Cpedido+"'";
+        try {
+            st.execute(borrarDetalles);
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    //La opcion 3 debe ser un rollback
+    public void rollback(){
+        try {
+            conexion.rollback();
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    //La opcion 4 debe ser un commit
+    public void commit(){
+        try {
+            conexion.commit();
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public void cerrarConexion() {
 
         try {
