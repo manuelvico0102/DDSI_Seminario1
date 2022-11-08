@@ -25,10 +25,11 @@ public class BaseDatos {
 
     //String url = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
     String url = "jdbc:oracle:thin:@oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
-    String usuario = "x6520114";
-    String password = "x6520114";
+    String usuario = "x8152965";
+    String password = "x8152965";
     Connection conexion = null;
     Statement st;
+    Savepoint pedido;
 
     public BaseDatos() {
 
@@ -49,10 +50,14 @@ public class BaseDatos {
     }
 
     public void crearTabla() throws SQLException {
-
+    
         // Borrar las tablas
-        this.borrarTablas();
-
+        try{
+            this.borrarTablas();
+        } catch (SQLException ex){
+            JOptionPane.showMessageDialog(null, "Las tablas no existian de antes");
+        }
+                
         // Crear la tabla
         String stock = "CREATE TABLE STOCK ("
                 + " CPRODUCTO NUMBER(3) PRIMARY KEY,"
@@ -98,7 +103,7 @@ public class BaseDatos {
                 + cCliente.getText() + "', '"
                 + fechaPedido.getText() + "')";
         st.executeUpdate(aniadePedido);
-        this.commit();  //Este commit habrá que quitarlo de momento esta de prueba
+        pedido = conexion.setSavepoint();  //Este commit habrá que quitarlo de momento esta de prueba
     }
 
     public void buscarTablaPedido(javax.swing.JTable tablePedido, String tabla) throws SQLException {
@@ -162,6 +167,12 @@ public class BaseDatos {
                                 + " WHERE CPEDIDO = '" +Cpedido+"'";
         try {
             st.execute(borrarDetalles);
+        } catch (SQLException ex) {
+            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+                
+        try {
+            conexion.rollback(pedido);
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
