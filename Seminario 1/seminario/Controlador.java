@@ -67,6 +67,13 @@ public class Controlador {
         this.vista.setVisible(true);
         this.consulta.setVisible(false);
         this.opciones.setVisible(false);
+        this.opcion1.setVisible(false);
+    }
+    
+        
+    public void volverOpciones(){
+        this.opcion1.setVisible(false);
+        this.opciones.setVisible(true);
     }
     
     public boolean comprobarStock(javax.swing.JTextField cProducto, javax.swing.JTextField cantidad){

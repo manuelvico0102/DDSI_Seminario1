@@ -124,9 +124,12 @@ public class Opcion1 extends javax.swing.JFrame {
             } catch (SQLException ex) {
                 JOptionPane.showMessageDialog(null, "No se ha podido insertar");
             }
+            this.controlador.volverOpciones();
         }
-        else
+        else{
             JOptionPane.showMessageDialog(null, "No hay stock suficiente");
+            this.controlador.volverMenu();
+        }
            
     }//GEN-LAST:event_jButton1ActionPerformed
 

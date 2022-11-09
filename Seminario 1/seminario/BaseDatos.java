@@ -25,8 +25,8 @@ public class BaseDatos {
 
     //String url = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
     String url = "jdbc:oracle:thin:@oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
-    String usuario = "x7203307";
-    String password = "x7203307";
+    String usuario = "x3310000";
+    String password = "x3310000";
     Connection conexion = null;
     Statement st;
     Savepoint pedido;
@@ -47,7 +47,7 @@ public class BaseDatos {
             }
         } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Error al conectar con la base de datos");
-            //System.exit(0);
+            System.exit(0);
         }
     }
 
@@ -189,23 +189,24 @@ public class BaseDatos {
         boolean hayStock = false;
         int cant = Integer.parseInt(cantidad.getText());
         
-        String salida = "SELECT * FROM STOCK WHERE CPRODUCTO = '" + Cprod.getText() + "'";
+        String salida = "SELECT * FROM STOCK WHERE CPRODUCTO = " + Cprod.getText();
         try {
-            ResultSet rs = st.executeQuery(salida);
+            ResultSet res = st.executeQuery(salida);
+            res.next();
             
-            int cantida = Integer.parseInt(rs.getString(2));
+            //int cantida = Integer.parseInt(res.getString(2));
 
-            if (cantida >= cant) {
+            if (res.getInt(2) >= cant) {
                 hayStock = true;
-                cant = cant - rs.getInt(2);
+                cant = res.getInt(2) - cant;
             }
-            rs.close();
+            res.close();
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         if (hayStock) {
-            String actualiza = "update STOCK set CANTIDAD='" + Integer.toString(cant) + "' "
+            String actualiza = "update STOCK set CANTIDAD='" + cant + "' "
                     + "WHERE CPRODUCTO = '" + Cprod.getText() + "'";
             try {
                 st.execute(actualiza);
