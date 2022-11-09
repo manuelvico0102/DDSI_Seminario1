@@ -25,11 +25,13 @@ public class BaseDatos {
 
     //String url = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
     String url = "jdbc:oracle:thin:@oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
-    String usuario = "x8152965";
-    String password = "x8152965";
+    String usuario = "x7203307";
+    String password = "x7203307";
     Connection conexion = null;
     Statement st;
     Savepoint pedido;
+    
+    int pedidoActual;
 
     public BaseDatos() {
 
@@ -50,14 +52,14 @@ public class BaseDatos {
     }
 
     public void crearTabla() throws SQLException {
-    
+
         // Borrar las tablas
-        try{
+        try {
             this.borrarTablas();
-        } catch (SQLException ex){
+        } catch (SQLException ex) {
             JOptionPane.showMessageDialog(null, "Las tablas no existian de antes");
         }
-                
+
         // Crear la tabla
         String stock = "CREATE TABLE STOCK ("
                 + " CPRODUCTO NUMBER(3) PRIMARY KEY,"
@@ -79,7 +81,9 @@ public class BaseDatos {
                 + "PRIMARY KEY(CPEDIDO, CPRODUCTO)"
                 + ")";
         st.executeUpdate(detallePedido);
+        
         // Añadir 10 tuplas
+        this.crearDiezTuplas();
 
         this.commit();
     }
@@ -96,6 +100,49 @@ public class BaseDatos {
 
         this.commit();
     }
+    
+    public void crearDiezTuplas() throws SQLException{
+        String aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "001" + "', '"
+                + "44" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "002" + "', '"
+                + "45" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "003" + "', '"
+                + "34" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "004" + "', '"
+                + "37" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "005" + "', '"
+                + "1" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "006" + "', '"
+                + "4" + "')";
+        st.executeUpdate(aniadeStock);
+         aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "007" + "', '"
+                + "3" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "008" + "', '"
+                + "13" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "009" + "', '"
+                + "412" + "')";
+        st.executeUpdate(aniadeStock);
+        aniadeStock = "INSERT INTO STOCK VALUES('"
+                + "010" + "', '"
+                + "73" + "')";
+        st.executeUpdate(aniadeStock);
+    }
 
     public void insertarPedido(javax.swing.JTextField cCliente, javax.swing.JTextField cPedido, javax.swing.JFormattedTextField fechaPedido) throws SQLException {
         String aniadePedido = "INSERT INTO PEDIDO VALUES('"
@@ -103,17 +150,22 @@ public class BaseDatos {
                 + cCliente.getText() + "', '"
                 + fechaPedido.getText() + "')";
         st.executeUpdate(aniadePedido);
-        pedido = conexion.setSavepoint();  //Este commit habrá que quitarlo de momento esta de prueba
+        
+        pedidoActual = Integer.parseInt(cPedido.getText());
+        
+
+        pedido = conexion.setSavepoint();
     }
 
     public void buscarTablaPedido(javax.swing.JTable tablePedido, String tabla) throws SQLException {
         DefaultTableModel modelo = (DefaultTableModel) tablePedido.getModel();
-        
+
         //Borramos las filas que hayan escritas
         int filas = modelo.getRowCount();
-        for(int i = 0; i < filas; i++)
-           modelo.removeRow(0);
-        
+        for (int i = 0; i < filas; i++) {
+            modelo.removeRow(0);
+        }
+
         ResultSet rs = st.executeQuery("SELECT * FROM " + tabla);
 
         if (tabla == "PEDIDO" || tabla == "DETALLE_PEDIDO") {
@@ -128,18 +180,22 @@ public class BaseDatos {
             }
         }
     }
-    
-    //Las opciones 1,2,3y4 no estan terminadas
-    //Opcion 1 
+
+    //Las opciones 1,2,3 y 4 no estan terminadas
+    //Opcion 1.
+
     //Comprueba si hay stock, si hay actualiza stock y devuelve true, en caso contrario false
-    public boolean compruebaStock(String Cprod, String cantidad){
+    public boolean compruebaStock(javax.swing.JTextField Cprod, javax.swing.JTextField cantidad) {
         boolean hayStock = false;
-        int cant = Integer.parseInt(cantidad);
-        String salida = "SELECT * FROM STOCK WHERE CPRODUCTO = '"+Cprod+"'"; 
+        int cant = Integer.parseInt(cantidad.getText());
+        
+        String salida = "SELECT * FROM STOCK WHERE CPRODUCTO = '" + Cprod.getText() + "'";
         try {
             ResultSet rs = st.executeQuery(salida);
             
-            if(rs.getInt(2) >= cant){
+            int cantida = Integer.parseInt(rs.getString(2));
+
+            if (cantida >= cant) {
                 hayStock = true;
                 cant = cant - rs.getInt(2);
             }
@@ -147,54 +203,67 @@ public class BaseDatos {
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        if(hayStock){
-            String actualiza = "update STOCK set CANTIDAD='"+Integer.toString(cant)+"' "
-                                + "WHERE CPRODUCTO = '"+Cprod+"'";
+
+        if (hayStock) {
+            String actualiza = "update STOCK set CANTIDAD='" + Integer.toString(cant) + "' "
+                    + "WHERE CPRODUCTO = '" + Cprod.getText() + "'";
             try {
                 st.execute(actualiza);
             } catch (SQLException ex) {
                 Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
-        
+
         return hayStock;
     }
     
+    
+    public void insertarDetalle(javax.swing.JTextField cProducto, javax.swing.JTextField cantidad) throws SQLException {
+        String aniadePedido = "INSERT INTO DETALLE_PEDIDO VALUES('"
+                + pedidoActual + "', '"
+                + cProducto.getText() + "', '"
+                + cantidad.getText() + "')";
+        st.executeUpdate(aniadePedido);
+
+        pedido = conexion.setSavepoint();
+    }
+
+
     //Opcion 2 de Dar de alta un nuevo pedido
-    public void eliminarDetallesDeUnPedido(String Cpedido){
+    public void eliminarDetallesDeUnPedido() {
         String borrarDetalles = "DELETE FROM DETALLE_PEDIDO"
-                                + " WHERE CPEDIDO = '" +Cpedido+"'";
+                + " WHERE CPEDIDO = '" + pedidoActual + "'";
         try {
             st.execute(borrarDetalles);
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
-                
+
         try {
             conexion.rollback(pedido);
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     //La opcion 3 debe ser un rollback
-    public void rollback(){
+    public void rollback() {
         try {
             conexion.rollback();
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
     //La opcion 4 debe ser un commit
-    public void commit(){
+    public void commit() {
         try {
             conexion.commit();
         } catch (SQLException ex) {
             Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void cerrarConexion() {
 
         try {

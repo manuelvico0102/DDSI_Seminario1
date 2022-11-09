@@ -14,15 +14,17 @@ public class Controlador {
     private BaseDatos base;
     public Vista vista;
     private InsertarPedido insert;
-    private Opciones opcion;
+    private Opciones opciones;
     private Consultas consulta;
+    private Opcion1 opcion1;
     
-    public Controlador(Vista vista, BaseDatos base, InsertarPedido insert, Opciones opcion, Consultas consulta){
+    public Controlador(Vista vista, BaseDatos base, InsertarPedido insert, Opciones opcion, Consultas consulta, Opcion1 opcion1){
         this.base = base;
         this.vista = vista;
         this.insert = insert;
-        this.opcion = opcion;
+        this.opciones = opcion;
         this.consulta = consulta;
+        this.opcion1 = opcion1;
         this.vista.setControlador(this);
         this.vista.setVisible(true);
     }
@@ -50,9 +52,9 @@ public class Controlador {
     }
     
     public void elegirOpcion(){
-        this.opcion.setVisible(false);
-        this.insert.setControlador(this);
-        this.opcion.setVisible(true);
+        this.opciones.setVisible(false);
+        this.opciones.setControlador(this);
+        this.opciones.setVisible(true);
     }
     
     public void mostrarTablas(){
@@ -64,5 +66,32 @@ public class Controlador {
     public void volverMenu(){
         this.vista.setVisible(true);
         this.consulta.setVisible(false);
+        this.opciones.setVisible(false);
+    }
+    
+    public boolean comprobarStock(javax.swing.JTextField cProducto, javax.swing.JTextField cantidad){
+        return this.base.compruebaStock(cProducto, cantidad);
+    }
+    
+    public void insertarDetalle(javax.swing.JTextField cProducto, javax.swing.JTextField cantidad) throws SQLException{
+        this.base.insertarDetalle(cProducto, cantidad);
+    }
+    
+    public void opcion1(){
+        this.opciones.setVisible(false);
+        this.opcion1.setControlador(this);
+        this.opcion1.setVisible(true);
+    }
+    
+    public void eliminarDetalles(){
+        this.base.eliminarDetallesDeUnPedido();
+    }
+    
+    public void cancelarPedido(){
+        this.base.rollback();
+    }
+    
+    public void finalizarPedido(){
+        this.base.commit();
     }
 }

@@ -4,17 +4,25 @@
  */
 package seminario1;
 
+import javax.swing.DefaultListModel;
+
 /**
  *
  * @author carlota
  */
 public class Opciones extends javax.swing.JFrame {
 
+    private Controlador controlador;
+
     /**
      * Creates new form Opciones
      */
     public Opciones() {
         initComponents();
+    }
+    
+    public void setControlador(Controlador controlador) {
+        this.controlador = controlador;
     }
 
     /**
@@ -39,6 +47,7 @@ public class Opciones extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
+        jList1.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         jList1.setToolTipText("");
         jScrollPane1.setViewportView(jList1);
 
@@ -85,7 +94,25 @@ public class Opciones extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        String valor = jList1.getSelectedValue();
+       
+        switch(valor){
+            case "1. Añadir detalle de producto":
+                this.controlador.opcion1();
+                break;
+            case "2. Eliminar todos los datos de producto":
+                this.controlador.eliminarDetalles();
+                break;
+            case "3. Cancelar pedido":
+                this.controlador.cancelarPedido();
+                this.controlador.volverMenu();
+                break;
+            case "4. Finalizar pedido":
+                this.controlador.finalizarPedido();
+                this.controlador.volverMenu();
+                break;
+        }
+      
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
