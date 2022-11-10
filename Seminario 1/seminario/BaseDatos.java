@@ -25,8 +25,8 @@ public class BaseDatos {
 
     //String url = "jdbc:oracle:thin:@//oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
     String url = "jdbc:oracle:thin:@oracle0.ugr.es:1521/practbd.oracle0.ugr.es";
-    String usuario = "x3310000";
-    String password = "x3310000";
+    String usuario = "x6520114";
+    String password = "x6520114";
     Connection conexion = null;
     Statement st;
     Savepoint pedido;
@@ -69,14 +69,14 @@ public class BaseDatos {
 
         String pedido = "CREATE TABLE PEDIDO ("
                 + " CPEDIDO NUMBER(3) PRIMARY KEY,"
-                + " CPRODUCTO NUMBER(3),"
+                + " CCLIENTE NUMBER(3),"
                 + "FECHA_PEDIDO DATE"
                 + ")";
         st.executeUpdate(pedido);
 
         String detallePedido = "CREATE TABLE DETALLE_PEDIDO ("
-                + " CPEDIDO NUMBER(3) REFERENCES STOCK(CPRODUCTO),"
-                + " CPRODUCTO NUMBER(3) REFERENCES PEDIDO(CPEDIDO),"
+                + " CPEDIDO NUMBER(3) REFERENCES PEDIDO(CPEDIDO),"
+                + " CPRODUCTO NUMBER(3) REFERENCES STOCK(CPRODUCTO),"
                 + "CANTIDAD NUMBER(4) CHECK (CANTIDAD >= 0),"
                 + "PRIMARY KEY(CPEDIDO, CPRODUCTO)"
                 + ")";
@@ -202,7 +202,7 @@ public class BaseDatos {
             }
             res.close();
         } catch (SQLException ex) {
-            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         if (hayStock) {
@@ -224,22 +224,13 @@ public class BaseDatos {
                 + pedidoActual + "', '"
                 + cProducto.getText() + "', '"
                 + cantidad.getText() + "')";
+        
         st.executeUpdate(aniadePedido);
-
-        pedido = conexion.setSavepoint();
     }
 
 
     //Opcion 2 de Dar de alta un nuevo pedido
     public void eliminarDetallesDeUnPedido() {
-        String borrarDetalles = "DELETE FROM DETALLE_PEDIDO"
-                + " WHERE CPEDIDO = '" + pedidoActual + "'";
-        try {
-            st.execute(borrarDetalles);
-        } catch (SQLException ex) {
-            Logger.getLogger(BaseDatos.class.getName()).log(Level.SEVERE, null, ex);
-        }
-
         try {
             conexion.rollback(pedido);
         } catch (SQLException ex) {

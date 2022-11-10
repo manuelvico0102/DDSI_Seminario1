@@ -52,7 +52,7 @@ public class Controlador {
     }
     
     public void elegirOpcion(){
-        this.opciones.setVisible(false);
+        this.insert.setVisible(false);
         this.opciones.setControlador(this);
         this.opciones.setVisible(true);
     }

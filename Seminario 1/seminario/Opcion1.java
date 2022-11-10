@@ -127,8 +127,8 @@ public class Opcion1 extends javax.swing.JFrame {
             this.controlador.volverOpciones();
         }
         else{
-            JOptionPane.showMessageDialog(null, "No hay stock suficiente");
-            this.controlador.volverMenu();
+            JOptionPane.showMessageDialog(null, "No hay stock suficiente o no existe el producto");
+            this.controlador.volverOpciones();
         }
            
     }//GEN-LAST:event_jButton1ActionPerformed
