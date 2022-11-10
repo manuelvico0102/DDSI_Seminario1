@@ -99,13 +99,16 @@ public class Opciones extends javax.swing.JFrame {
         switch(valor){
             case "1. Añadir detalle de producto":
                 this.controlador.opcion1();
+                
                 break;
             case "2. Eliminar todos los datos de producto":
                 this.controlador.eliminarDetalles();
+                this.controlador.mostrarTablas();
                 break;
             case "3. Cancelar pedido":
                 this.controlador.cancelarPedido();
                 this.controlador.volverMenu();
+                this.controlador.mostrarTablas();
                 break;
             case "4. Finalizar pedido":
                 this.controlador.finalizarPedido();
